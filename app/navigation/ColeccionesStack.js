@@ -1,18 +1,17 @@
 import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
-import Perfil from "../screens/Perfil";
+import Colecciones from "../screens/Colecciones";
 
 const Stack = createStackNavigator();
 
-export default function PerfilStack(){
+export default function ColeccionesStack(){
     return(
         <Stack.Navigator>
             <Stack.Screen
-                name="perfil"
-                component={Perfil}
-                options={{title:"Perfil"}}
+                name="colecciones"
+                component={Colecciones}
+                options={{title:"Colecciones"}}
             />
-
         </Stack.Navigator>
     )
 }

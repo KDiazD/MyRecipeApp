@@ -3,24 +3,45 @@ import { Button, View } from "react-native";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Perfil from "../screens/Perfil";
-import Inicio from "../screens/Inicio";
-import Buscador from "../screens/Buscador";
-import Categorias from "../screens/Categorias";
+
+
+import PerfilStack from "./PerfilStack"; 
+import InicioStack from "./InicioStack";
+import BuscadorStack from "./BuscadorStack";
+import CategoriasStack from "./CategoriasStack";
+import ColeccionesStack from "./ColeccionesStack";
+import FavoritosStack from "./FavoritosStack";
+import AuthenticationStack from "./AuthenticationStack";
+
+
+
+
+import Colecciones from "../screens/Colecciones";
 import Favoritos from "../screens/Favoritos";
+import { createStackNavigator } from "@react-navigation/stack";
 
 
 const Drawer = createDrawerNavigator();
 
-export default function Navigation() {
+export default function Navigation(props) {
+  const {islogged} = props;
   return (
     <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen name="inicio" component={Inicio} />
-        <Drawer.Screen name="buscador" component={Buscador} />
-        <Drawer.Screen name="categorias" component={Categorias} />
+      {islogged ? (
+              <Drawer.Navigator>
+              <Drawer.Screen name="Inicio" component={InicioStack} />
+              <Drawer.Screen name="Perfil" component={PerfilStack}/>
+              <Drawer.Screen name="Buscador" component={BuscadorStack} />
+              <Drawer.Screen name="Categorias" component={CategoriasStack} />
+              <Drawer.Screen name="Colecciones" component={ColeccionesStack}/>
+              <Drawer.Screen name="Favoritos" component={FavoritosStack}/>
+      
+            </Drawer.Navigator>
+        
+      ):(
+          <AuthenticationStack/>
+      )}
 
-      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

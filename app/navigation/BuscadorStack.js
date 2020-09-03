@@ -1,18 +1,17 @@
 import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
-import Perfil from "../screens/Perfil";
+import Buscador from "../screens/Buscador";
 
 const Stack = createStackNavigator();
 
-export default function PerfilStack(){
+export default function BuscadorStack(){
     return(
         <Stack.Navigator>
             <Stack.Screen
-                name="perfil"
-                component={Perfil}
-                options={{title:"Perfil"}}
+                name="inicio"
+                component={Buscador}
+                options={{title:"Inicio"}}
             />
-
         </Stack.Navigator>
     )
 }
