@@ -10,7 +10,16 @@ export default function FavoritosStack(){
             <Stack.Screen
                 name="favoritos"
                 component={Favoritos}
-                options={{title:"Favoritos"}}
+                options={{
+                    title:"Favoritos",
+                    headerStyle: {
+                        backgroundColor: '#2127BC',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: "100",
+                    }
+                }}
             />
         </Stack.Navigator>
     )

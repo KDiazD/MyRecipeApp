@@ -10,7 +10,16 @@ export default function CategoriasStack(){
             <Stack.Screen
                 name="categorias"
                 component={Categorias}
-                options={{title:"Categorias"}}
+                options={{
+                    title:"Categorias",
+                    headerStyle: {
+                        backgroundColor: '#2127BC',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: "100",
+                    },  
+                }}
             />
         </Stack.Navigator>
     )

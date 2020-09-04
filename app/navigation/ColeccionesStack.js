@@ -10,7 +10,16 @@ export default function ColeccionesStack(){
             <Stack.Screen
                 name="colecciones"
                 component={Colecciones}
-                options={{title:"Colecciones"}}
+                options={{ 
+                    title:"Colecciones",
+                    headerStyle: {
+                        backgroundColor: '#2127BC',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: "100",
+                    },
+                 }}
             />
         </Stack.Navigator>
     )

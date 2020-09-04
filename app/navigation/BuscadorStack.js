@@ -1,16 +1,18 @@
 import React from "react";
-import {createStackNavigator} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import Buscador from "../screens/Buscador";
 
 const Stack = createStackNavigator();
 
-export default function BuscadorStack(){
-    return(
+export default function BuscadorStack() {
+    return (
         <Stack.Navigator>
             <Stack.Screen
-                name="inicio"
+                name="buscador"
                 component={Buscador}
-                options={{title:"Inicio"}}
+                options={{
+                    headerShown: false,
+                }}
             />
         </Stack.Navigator>
     )
