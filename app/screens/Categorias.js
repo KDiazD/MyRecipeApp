@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getRequest } from "../api";
 import {
   StyleSheet,
   View,
@@ -6,28 +7,41 @@ import {
   Image,
   FlatList,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 const { width, height } = Dimensions.get("window"); // capturo las dimensiones del dispositivo donde se esta ejecutando la app
+import { useNavigation } from "@react-navigation/native";
 
 export default function Categorias() {
-  const [categorias, setCategorias] = useState(datosCategoria());
-
+  const [categorias, setCategorias] = useState([]);
+  const navigation = useNavigation();
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.containercategoria}>
-        <Image
-          source={item.imagen}
-          resizeMode="stretch"
-          style={styles.imgLogo}
-        />
-        <View style={[styles.overlay1, { backgroundColor: item.color }]} />
+      <TouchableOpacity onPress={() => navigation.navigate("Inicio")}>
+        <View style={styles.containercategoria}>
+          <Image
+            source={{ uri: item.imagen }}
+            resizeMode="stretch"
+            style={styles.imgLogo}
+          />
 
-        <View style={styles.containertext}>
-          <Text style={styles.textcategoria}>{item.nombre}</Text>
+          <View style={[styles.overlay1, { backgroundColor: item.color }]} />
+
+          <View style={styles.containertext}>
+            <Text style={styles.textcategoria}>{item.categorias}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
+
+  useEffect(() => {
+    getRequest("recetas/listar_categorias", (categorias) => {
+      console.log(categorias); // hello
+      setCategorias(categorias);
+    });
+  }, []);
+
   return (
     <View>
       <FlatList
@@ -74,44 +88,3 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
 });
-
-function datosCategoria() {
-  return [
-    {
-      nombre: "Arroces",
-      id: 1,
-      imagen: require("../../assets/arroces.jpg"),
-      color: "#A49D24",
-    },
-    {
-      nombre: "Ensaladas",
-      id: 2,
-      imagen: require("../../assets/ensaladas.jpg"),
-      color: "#546A08",
-    },
-    {
-      nombre: "Pastas",
-      id: 3,
-      imagen: require("../../assets/pastas.jpg"),
-      color: "#DC7444",
-    },
-    {
-      nombre: "Verduras",
-      id: 4,
-      imagen: require("../../assets/verduras.jpg"),
-      color: "#89DB66",
-    },
-    {
-      nombre: "Sopas",
-      id: 5,
-      imagen: require("../../assets/sopa.jpg"),
-      color: "#D47C13",
-    },
-    {
-      nombre: "Legumbres",
-      id: 6,
-      imagen: require("../../assets/legumbres.jpg"),
-      color: "#60481F",
-    },
-  ];
-}

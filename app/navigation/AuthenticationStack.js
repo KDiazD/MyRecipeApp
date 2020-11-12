@@ -6,7 +6,8 @@ import Registro from "../screens/Cuenta/Registro";
 
 const Stack = createStackNavigator();
 
-export default function AuthenticationStack(){
+export default function AuthenticationStack(props){
+    const {setIslogged} = props;
     return(
         <Stack.Navigator>
             <Stack.Screen
@@ -14,11 +15,10 @@ export default function AuthenticationStack(){
                 component={Welcome}
                 options={{headerShown:false}}
             />
-            <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{title:"Inicia Sesión"}}
-            />
+            <Stack.Screen name="Login" options={{title:"Inicia Sesión"}} >
+              {props => <Login {...props} setIslogged={setIslogged} />}
+            </Stack.Screen>
+
             <Stack.Screen
             name="Registro"
             component={Registro}

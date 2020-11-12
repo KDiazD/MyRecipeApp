@@ -1,18 +1,37 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
+import {postRequest} from '../../api';
+import {guardarIdUsuario} from '../../common';
 
-export default function LoginForm() {
+
+export default function LoginForm(props) {
+  const { setIslogged } = props;
   const [showPassword, setShowPassword] = useState(false);
+  const [formulario, setFormulario] = useState({});
+  const obtenerCambio = (valor, nombreCampo) => {
+    setFormulario({ ...formulario, [nombreCampo]: valor });
+
+  };
+  const enviarDatos = async() =>{
+    postRequest('usuarios/login', formulario, (respuesta)=>{
+      guardarIdUsuario(respuesta?.usuario?.id);
+      setIslogged(respuesta?.usuario?.id ? true : false)
+
+    })
+  }
+
   return (
     <View style={styles.formContainer}>
       <Input
+        onChangeText={(valor) => obtenerCambio(valor, "username")}
         placeholder="Nombre de Usuario"
         containerStyle={styles.inputForm}
         leftIcon={<Icon type="material-community" name="account" />}
       />
 
       <Input
+        onChangeText={(valor) => obtenerCambio(valor, "password")}
         placeholder="Contraseña"
         containerStyle={styles.inputForm}
         password={true}
@@ -29,6 +48,7 @@ export default function LoginForm() {
 
       <Button
         title="Inicia sesión"
+        onPress={enviarDatos}
         buttonStyle={styles.btnInicio}
         containerStyle={styles.btnContainer}
       />

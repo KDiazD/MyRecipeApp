@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { Avatar, Divider } from "react-native-elements";
+import { Avatar, Divider, Button } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { obtenerIdUsuario } from "../../common";
+import { getRequest } from "../../api";
 
-export default function InfoUser() {
+export default function InfoUser(props) {
+  const [perfil, setPerfil] = useState([]);
+  const navigation = useNavigation();
+  const obtenerInfoUsuario = async () => {
+    const id_usuario = await obtenerIdUsuario();
+    getRequest("usuarios/listar_usuarios/" + id_usuario, (perfil) => {
+      console.log(perfil);
+      setPerfil(perfil);
+    });
+  };
+  useEffect(() => {
+    obtenerInfoUsuario();
+  }, []);
   return (
     <ScrollView>
       <View>
@@ -12,23 +27,16 @@ export default function InfoUser() {
               rounded
               size="xlarge"
               containerStyle={styles.userInfoAvatar}
-              source={require("../../../assets/userImage.png")}
+              source={{ uri: perfil.imagen }}
             />
           </View>
           <View style={styles.ViewTxt}>
-            <Text style={styles.txtUsua}>@KarlaDiazD</Text>
+            <Text style={styles.txtUsua}>@{perfil.username}</Text>
           </View>
         </View>
         <View style={styles.ViewtxtName}>
-          <Text style={styles.txtName}>Karla Díaz Donato</Text>
-          <Text style={styles.txtPerfil}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged.
-          </Text>
+          <Text style={styles.txtName}>{perfil.nombre}</Text>
+          <Text style={styles.txtPerfil}>{perfil.descripcion}</Text>
         </View>
         <View
           style={{
@@ -41,21 +49,29 @@ export default function InfoUser() {
         >
           <View style={{ borderRightWidth: 1, paddingRight: 10 }}>
             <Text style={{ textAlign: "center" }}>Recetas</Text>
-            <Text style={{ textAlign: "center" }}>4</Text>
+            <Text style={{ textAlign: "center" }}>{perfil.recetas}</Text>
           </View>
           <View>
             <Text style={{ textAlign: "center" }}>Seguidores </Text>
-            <Text style={{ textAlign: "center" }}>100</Text>
+            <Text style={{ textAlign: "center" }}>{perfil.seguidores}</Text>
           </View>
           <View style={{ borderLeftWidth: 1, paddingLeft: 10 }}>
             <Text style={{ textAlign: "center" }}>Siguiendo</Text>
-            <Text style={{ textAlign: "center" }}>400</Text>
+            <Text style={{ textAlign: "center" }}>{perfil.seguidos}</Text>
           </View>
+        </View>
+        <View style={styles.ViewbtnAdd}>
+          <Button
+            title="Agrega una receta"
+            buttonStyle={styles.btnInicio}
+            containerStyle={styles.btnContainer}
+          />
         </View>
       </View>
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   ViewHeader: {
     backgroundColor: "#2D3D8F",
@@ -74,18 +90,15 @@ const styles = StyleSheet.create({
     marginTop: 280,
   },
   ViewTxt: {
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    marginTop: 75,
+    marginTop: 85,
   },
   txtUsua: {
-    textAlign: "center",
+    textAlign: "left",
     color: "#767676",
   },
   ViewtxtName: {
     marginStart: 10,
-    marginTop: 120,
+    marginTop: 130,
   },
   txtName: {
     fontWeight: "bold",
@@ -94,5 +107,13 @@ const styles = StyleSheet.create({
   txtPerfil: {
     fontSize: 13,
     marginTop: 15,
+  },
+  ViewbtnAdd: { alignItems: "flex-end", justifyContent: "center", padding: 30 },
+  btnInicio: {
+    backgroundColor: "#265429",
+    textAlign: "center",
+    fontSize: 16,
+    borderRadius: 20,
+    marginTop: 20,
   },
 });

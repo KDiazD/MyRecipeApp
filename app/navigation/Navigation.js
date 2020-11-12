@@ -15,21 +15,25 @@ import { ScreenStack } from "react-native-screens";
 const Drawer = createDrawerNavigator();
 
 export default function Navigation(props) {
-  const { islogged } = props;
+  const { islogged, setIslogged } = props;
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         {islogged ? (
           <Drawer.Navigator>
             <Drawer.Screen name="Inicio" component={InicioStack} />
-            <Drawer.Screen name="Perfil" component={PerfilStack} />
+            <Drawer.Screen name="Perfil">
+              {props => <PerfilStack {...props} setIslogged={setIslogged} />}
+            </Drawer.Screen>
+                        
             <Drawer.Screen name="Buscador" component={BuscadorStack} />
             <Drawer.Screen name="Categorias" component={CategoriasStack} />
             <Drawer.Screen name="Colecciones" component={ColeccionesStack} />
             <Drawer.Screen name="Favoritos" component={FavoritosStack} />
           </Drawer.Navigator>
         ) : (
-          <AuthenticationStack />
+
+          <AuthenticationStack setIslogged={setIslogged} />
         )}
       </NavigationContainer>
     </SafeAreaProvider>

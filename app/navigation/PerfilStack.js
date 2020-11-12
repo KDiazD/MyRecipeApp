@@ -2,12 +2,19 @@ import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
 import {Icon} from "react-native-elements";
 import {StyleSheet, View} from "react-native";
-
+import { eliminarIdUUsuario } from '../common';
 import Perfil from "../screens/Cuenta/Perfil";
 
 const Stack = createStackNavigator();
 
-export default function PerfilStack(){
+export default function PerfilStack(props){
+    const { setIslogged } = props;
+
+    const cerrarSesion =()=>{
+        eliminarIdUUsuario();
+        setIslogged(false);
+    }
+
     return(
         <Stack.Navigator>
             <Stack.Screen
@@ -25,7 +32,7 @@ export default function PerfilStack(){
                     headerRight: () => (
                         <View style={styles.Viewbtnnav}>
                             <Icon type="material-community" name="pencil" color="#fff"/>
-                            <Icon type="material-community" name="exit-to-app" color="#fff" marginLeft={10}/>
+                            <Icon type="material-community" name="exit-to-app" color="#fff" marginLeft={10} onPress={cerrarSesion}/>
                         </View>
                     ),
                 }}

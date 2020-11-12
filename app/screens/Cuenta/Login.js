@@ -5,7 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 
 import LoginForm from "../../components/Cuenta/LoginForm";
 
-export default function Login() {
+export default function Login(props) {
+  const { setIslogged } = props;
   return (
     <ScrollView>
       <Image
@@ -16,7 +17,7 @@ export default function Login() {
 
       <View style={styles.viewContainer}>
         <Divider style={styles.divider} />
-        <LoginForm />
+        <LoginForm  setIslogged={setIslogged} />
         <CreaCuenta />
       </View>
     </ScrollView>

@@ -11,7 +11,7 @@ import {
 import {Icon} from "react-native-elements";
 const { width, height } = Dimensions.get("window");
 
-export default function Inicio() {
+export default function RecetasColeccion() {
   const [categorias, setCategorias] = useState(datosCategoria());
     const [showLike, setShowLike] = useState(false);
 
