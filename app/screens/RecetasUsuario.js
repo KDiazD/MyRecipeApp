@@ -1,5 +1,7 @@
+//Aquí va la lista de recetas por usuarios
 import React, { useState, useEffect } from "react";
 import { getRequest } from "../api";
+import { obtenerIdUsuario } from "../common";
 import {
   Text,
   View,
@@ -8,23 +10,44 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
-import { Icon, Avatar } from "react-native-elements";
+import { Icon, Avatar, Button } from "react-native-elements";
 const { width, height } = Dimensions.get("window");
 import { useNavigation } from "@react-navigation/native";
 
-export default function Inicio() {
-  const [recetasList, setRecetasList] = useState([]);
+export default function RecetasUsuario(props) {
+  const [recetasListUsua, setRecetasListUsua] = useState([]);
   const [showLike, setShowLike] = useState(false);
   const navigation = useNavigation();
 
-  const meGusta = () => {
-    /// peticion
-    // envia el id de la receta
-    // obtenerUsuarioId
+  let id_usuario = null;
+
+  const obtenerInfoUsuario = async () => {
+    const id_usuario = await obtenerIdUsuario();
+    getRequest("usuarios/listar_usuarios/" + id_usuario, (perfil) => {
+      setRecetasListUsua(perfil);
+    });
   };
 
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getRequest("/listar_recetas_usuario/" + id_usuario, (recetasListUsua) => {
+      console.log(id_usuario, "entra al get");
+      setRecetasListUsua(recetasListUsua.recetasUsua);
+    });
+    //obtenerInfoUsuario2();
+  }, [[isFocused]]);
   const renderItem = ({ item }) => {
+    <View style={styles.ViewbtnAdd}>
+      <Button
+        title="Añade una receta"
+        onPress={() => navigation.navigate("AddRecetas")}
+        buttonStyle={styles.btnInicio}
+        containerStyle={styles.btnContainer}
+      />
+    </View>;
     return (
       <View style={styles.containerFavoritos}>
         <View
@@ -79,18 +102,23 @@ export default function Inicio() {
             color="#517fa4"
           />
         </View>
+
+        <View style={styles.ViewbtnAdd}>
+          <Button
+            title="Editar receta"
+            onPress={() => navigation.navigate("EditarRecetas")}
+            buttonStyle={styles.btnInicio}
+            containerStyle={styles.btnContainer}
+          />
+        </View>
       </View>
     );
   };
-  useEffect(() => {
-    getRequest("recetas/listar_recetas", (recetasList) => {
-      setRecetasList(recetasList.recetas);
-    });
-  }, []);
+
   return (
     <View style={styles.containerFavoritos}>
       <FlatList
-        data={recetasList}
+        data={recetasListUsua}
         renderItem={renderItem}
         numColumns={1}
         style={{ marginTop: 25 }}
@@ -138,4 +166,5 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
   },
+  ViewbtnAdd: { alignItems: "flex-end", justifyContent: "center", padding: 30 },
 });

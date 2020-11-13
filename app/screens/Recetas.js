@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getRequest } from "../api";
 import {
   Text,
   View,
@@ -8,46 +9,108 @@ import {
   Dimensions,
 } from "react-native";
 
-import {Icon} from "react-native-elements";
+import { Icon, Avatar } from "react-native-elements";
 const { width, height } = Dimensions.get("window");
+import { useNavigation } from "@react-navigation/native";
 
-export default function Recetas() {
-  const [categorias, setCategorias] = useState(datosCategoria());
-    const [showLike, setShowLike] = useState(false);
+export default function Recetas(props) {
+  const [recetasListCat, setRecetasListCat] = useState([]);
+  const [showLike, setShowLike] = useState(false);
+  const navigation = useNavigation();
+  const {
+    route: {
+      params: { id_categorias },
+    },
+  } = props;
+  console.log(props);
+  const meGusta = () => {
+    /// peticion
+    // envia el id de la receta
+    // obtenerUsuarioId
+  };
 
   const renderItem = ({ item }) => {
     return (
       <View style={styles.containerFavoritos}>
-        <Image
-          source={item.imagen}
-          resizeMode="stretch"
-          style={styles.imgLogo}
-        />
-        <Text style={styles.textcategoria}>{item.nombre}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            textAlign: "center",
+            marginLeft: -50,
+            width: "95%",
+            marginTop: "10%",
+          }}
+        >
+          <Avatar rounded size="medium" source={{ uri: item.foto }} />
+          <Text
+            style={styles.txtnombre}
+            onPress={() => navigation.navigate("Perfil", { id: item.id })}
+          >
+            {item.nombre}
+          </Text>
+        </View>
+        <View>
+          <Image
+            source={{ uri: item.imagen }}
+            resizeMode="stretch"
+            style={styles.imgLogo}
+          />
+          <Text style={styles.textcategoria}>{item.titulo}</Text>
+          <Text style={styles.txtTitulo}>Ingredientes</Text>
+          <Text style={styles.txtTexto}>{item.ingredientes}</Text>
+          <Text style={styles.txtTitulo}>Preparación</Text>
+          <Text style={styles.txtText}>{item.observaciones}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 15,
+            justifyContent: "space-evenly",
+            width: "50%",
+          }}
+        >
+          <Icon
+            name="thumb-up-outline"
+            name={showLike ? "heart-multiple" : "heart-multiple-outline"}
+            onPress={() => setShowLike(!showLike)}
+            type="material-community"
+            color="#517fa4"
+          />
 
-        <View style={{flexDirection: "row", marginTop: 15, justifyContent: "space-around", alignItems: "center"}}>
-        
-            <Icon
-              name='thumb-up-outline'
-              name={showLike ?  "heart-multiple" : "heart-multiple-outline"}
-                onPress={() => setShowLike(!showLike)}
-              type='material-community'
-              color='#517fa4'/>
-
-            <Icon
-              name='comment-outline'
-              type='material-community'
-              color='#517fa4'
-            />
+          <Icon
+            name="comment-outline"
+            type="material-community"
+            color="#517fa4"
+          />
         </View>
       </View>
     );
   };
+
+  const obtenerRecetas = () => {
+    console.log("albertooooooooooooooooo");
+    console.log(id_categorias);
+
+    getRequest(
+      "recetas/listar_recetas_categoria/" + id_categorias,
+      (recetasListCat) => {
+        console.log(recetasListCat, "hola"); // hello si tienes bien el internet en tu celular? siiii estoy volviendo a compilar a ver kpe2yaa probee BUENO
+        setRecetasListCat(recetasListCat.recetasCat);
+      }
+    );
+  };
+
+  useEffect(() => {
+    obtenerRecetas();
+  }, []);
+
   return (
-    <View>
+    <View style={styles.containerFavoritos}>
       <FlatList
-        data={categorias}
+        data={recetasListCat}
         renderItem={renderItem}
+        numColumns={1}
         style={{ marginTop: 25 }}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -57,7 +120,6 @@ export default function Recetas() {
 
 const styles = StyleSheet.create({
   containerFavoritos: {
-    flex: 1,
     marginVertical: 10,
     marginHorizontal: 5,
     justifyContent: "center",
@@ -68,47 +130,29 @@ const styles = StyleSheet.create({
     width: width / 1.5,
     height: width / 1.5,
     alignContent: "center",
+    marginTop: 20,
+  },
+  txtTexto: {
+    color: "black",
+    fontSize: 12,
+  },
+  txtTitulo: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  txtnombre: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "left",
+    marginTop: 10,
+    fontSize: 20,
   },
 
   textcategoria: {
     color: "black",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 25,
+    textAlign: "center",
   },
 });
-
-function datosCategoria() {
-  return [
-
-    {
-      nombre: "Saludables",
-      id: 2,
-      imagen: require("../../assets/saludables.jpg"),
-      color: "#546A08",
-    },
-    {
-      nombre: "Fitness",
-      id: 3,
-      imagen: require("../../assets/fitness.jpg"),
-      color: "#DC7444",
-    },
-    {
-      nombre: "Gourmet",
-      id: 4,
-      imagen: require("../../assets/gourmet.jpg"),
-      color: "#89DB66",
-    },
-    {
-      nombre: "Snacks",
-      id: 5,
-      imagen: require("../../assets/snacks.png"),
-      color: "#D47C13",
-    },
-    {
-      nombre: "Almuerzos",
-      id: 6,
-      imagen: require("../../assets/almuerzo.jpg"),
-      color: "#60481F",
-    },
-  ];
-}

@@ -4,6 +4,7 @@ import { Avatar, Divider, Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { obtenerIdUsuario } from "../../common";
 import { getRequest } from "../../api";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function InfoUser(props) {
   const [perfil, setPerfil] = useState([]);
@@ -11,13 +12,14 @@ export default function InfoUser(props) {
   const obtenerInfoUsuario = async () => {
     const id_usuario = await obtenerIdUsuario();
     getRequest("usuarios/listar_usuarios/" + id_usuario, (perfil) => {
-      console.log(perfil);
       setPerfil(perfil);
     });
   };
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     obtenerInfoUsuario();
-  }, []);
+  }, [isFocused]);
   return (
     <ScrollView>
       <View>
@@ -62,7 +64,14 @@ export default function InfoUser(props) {
         </View>
         <View style={styles.ViewbtnAdd}>
           <Button
-            title="Agrega una receta"
+            title="Mis recetas"
+            onPress={() => navigation.navigate("RecetasUsuario")}
+            buttonStyle={styles.btnInicio}
+            containerStyle={styles.btnContainer}
+          />
+          <Button
+            title="Añade una receta"
+            onPress={() => navigation.navigate("AddRecetas")}
             buttonStyle={styles.btnInicio}
             containerStyle={styles.btnContainer}
           />

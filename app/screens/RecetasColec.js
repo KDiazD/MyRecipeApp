@@ -13,11 +13,16 @@ import { Icon, Avatar } from "react-native-elements";
 const { width, height } = Dimensions.get("window");
 import { useNavigation } from "@react-navigation/native";
 
-export default function Inicio() {
-  const [recetasList, setRecetasList] = useState([]);
+export default function RecetasColec(props) {
+  const [recetasListColec, setRecetasListColec] = useState([]);
   const [showLike, setShowLike] = useState(false);
   const navigation = useNavigation();
-
+  const {
+    route: {
+      params: { id_colecciones },
+    },
+  } = props;
+  console.log(props);
   const meGusta = () => {
     /// peticion
     // envia el id de la receta
@@ -82,15 +87,25 @@ export default function Inicio() {
       </View>
     );
   };
+
+  const obtenerRecetas = () => {
+    getRequest(
+      "recetas/listar_recetas_colecciones/" + id_colecciones,
+      (recetasListColec) => {
+        console.log(recetasListColec, "hola");
+        setRecetasListColec(recetasListColec.recetasColecciones);
+      }
+    );
+  };
+
   useEffect(() => {
-    getRequest("recetas/listar_recetas", (recetasList) => {
-      setRecetasList(recetasList.recetas);
-    });
+    obtenerRecetas();
   }, []);
+
   return (
     <View style={styles.containerFavoritos}>
       <FlatList
-        data={recetasList}
+        data={recetasListColec}
         renderItem={renderItem}
         numColumns={1}
         style={{ marginTop: 25 }}
@@ -127,7 +142,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     textAlign: "left",
-
     marginTop: 10,
     fontSize: 20,
   },

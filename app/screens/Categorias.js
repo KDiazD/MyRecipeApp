@@ -17,7 +17,11 @@ export default function Categorias() {
   const navigation = useNavigation();
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate("Inicio")}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Recetas", { id_categorias: item.id })
+        }
+      >
         <View style={styles.containercategoria}>
           <Image
             source={{ uri: item.imagen }}
@@ -37,8 +41,7 @@ export default function Categorias() {
 
   useEffect(() => {
     getRequest("recetas/listar_categorias", (categorias) => {
-      console.log(categorias); // hello
-      setCategorias(categorias);
+      setCategorias(categorias); /// KARLAAAAAAAAAAAAAAAAAAAAAA K ACA ESTOY, HAY REU FAMILIAR XDDDD, pero yo sigo viendo el pc que archivo era me
     });
   }, []);
 

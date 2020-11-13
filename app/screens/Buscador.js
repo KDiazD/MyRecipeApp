@@ -13,12 +13,10 @@ export default function Buscador() {
   const obtenerCambio = (valor) => {
     setbusqueda(valor);
     getRequest("recetas/buscador/" + valor, (resultado) => {
-      console.log(resultado);
       setRecetas(resultado.buscador);
     });
   };
   const renderItem = ({ item }) => {
-    console.log(item);
     return (
       <View>
         <ListItem

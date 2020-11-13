@@ -19,7 +19,14 @@ export default function BuscadorStack() {
         name="RecetasInd"
         component={RecetasInd}
         options={{
-          headerShown: false,
+          title: "",
+          headerStyle: {
+            backgroundColor: "#2127BC",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "100",
+          },
         }}
       />
     </Stack.Navigator>
